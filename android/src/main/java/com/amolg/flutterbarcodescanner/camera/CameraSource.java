@@ -270,6 +270,7 @@ public class CameraSource {
     public void release() {
         synchronized (mCameraLock) {
             stop();
+            if (mFrameProcessor!=null)
             mFrameProcessor.release();
         }
     }
@@ -291,13 +292,8 @@ public class CameraSource {
 
             // SurfaceTexture was introduced in Honeycomb (11), so if we are running and
             // old version of Android. fall back to use SurfaceView.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                mDummySurfaceTexture = new SurfaceTexture(DUMMY_TEXTURE_NAME);
-                mCamera.setPreviewTexture(mDummySurfaceTexture);
-            } else {
-                mDummySurfaceView = new SurfaceView(mContext);
-                mCamera.setPreviewDisplay(mDummySurfaceView.getHolder());
-            }
+            mDummySurfaceTexture = new SurfaceTexture(DUMMY_TEXTURE_NAME);
+            mCamera.setPreviewTexture(mDummySurfaceTexture);
             mCamera.startPreview();
 
             mProcessingThread = new Thread(mFrameProcessor);
@@ -351,6 +347,7 @@ public class CameraSource {
                     // quickly after stop).
                     mProcessingThread.join();
                 } catch (InterruptedException e) {
+                    System.out.print(e);
                 }
                 mProcessingThread = null;
             }
@@ -374,6 +371,7 @@ public class CameraSource {
                         mCamera.setPreviewDisplay(null);
                     }
                 } catch (Exception e) {
+                    System.out.print(e);
                 }
                 mCamera.release();
                 mCamera = null;
@@ -1030,6 +1028,7 @@ public class CameraSource {
                 try {
                     mDetector.receiveFrame(outputFrame);
                 } catch (Throwable t) {
+
                 } finally {
                     mCamera.addCallbackBuffer(data.array());
                 }

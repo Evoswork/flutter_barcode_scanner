@@ -141,6 +141,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
             scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
         } catch (Exception e) {
+            throw e;
         }
     }
 
