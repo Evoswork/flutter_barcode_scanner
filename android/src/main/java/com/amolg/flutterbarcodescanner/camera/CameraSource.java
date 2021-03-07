@@ -25,6 +25,7 @@ import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Build;
 import android.os.SystemClock;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 import androidx.annotation.StringDef;
@@ -270,8 +271,8 @@ public class CameraSource {
     public void release() {
         synchronized (mCameraLock) {
             stop();
-            if (mFrameProcessor!=null)
-            mFrameProcessor.release();
+            if (mFrameProcessor != null)
+                mFrameProcessor.release();
         }
     }
 
@@ -962,8 +963,8 @@ public class CameraSource {
 
         @SuppressLint("Assert")
         void release() {
-//            assert (mProcessingThread.getState() == State.TERMINATED);
-            if (mDetector != null){
+            assert (mProcessingThread.getState() == State.TERMINATED);
+            if (mDetector != null) {
                 mDetector.release();
                 mDetector = null;
             }
@@ -1030,7 +1031,7 @@ public class CameraSource {
                 try {
                     mDetector.receiveFrame(outputFrame);
                 } catch (Throwable t) {
-
+                    System.out.print(t);
                 } finally {
                     mCamera.addCallbackBuffer(data.array());
                 }
